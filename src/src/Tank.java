@@ -8,9 +8,13 @@ public class Tank
 {
 	private int x;
 	private int y;
+	private int oldX;
+	private int oldY;
 	private boolean good;
 	private boolean live=true;
 	private static Random r = new Random();
+	private int life=100;
+	private BloodBar bb= new BloodBar();
 	
 	public static final int WIDTH=30;
 	public static final int HEIGH=30;
@@ -32,6 +36,8 @@ public class Tank
 	{
 		this.x = x;
 		this.y = y;
+		this.oldX=x;
+		this.oldY=y;
 		this.good=good;
 	}
 	
@@ -54,7 +60,12 @@ public class Tank
 			
 			//tc.enemyTanks.add(this);
 		}
-		else	g.setColor(Color.red);
+		else	
+		{
+			g.setColor(Color.red);
+			bb.draw(g);
+			
+		}
 		g.fillOval(x, y, WIDTH,HEIGH );
 		g.setColor(c);
 		
@@ -102,6 +113,8 @@ public class Tank
 	{
 		//int keyValue=e.getKeyCode();
 		//MoveDir(e);
+		oldX=x;
+		oldY=y;
 		switch(dir)
 		{
 		case L:
@@ -141,10 +154,10 @@ public class Tank
 		}
 	
 		//  防止坦克出界
-		if(x<0) x=0;
-		if(y<0) y=0;
-		if(x+Tank.WIDTH>TankClient.GAME_WIDE) x=TankClient.GAME_WIDE-Tank.WIDTH;
-		if(y+Tank.HEIGH>TankClient.GAME_LENGH) y=TankClient.GAME_LENGH-Tank.HEIGH;
+		if(x<0) stay();
+		if(y<0) stay();
+		if(x+Tank.WIDTH>TankClient.GAME_WIDE) stay();
+		if(y+Tank.HEIGH>TankClient.GAME_LENGH) stay();
 		if(!good)
 		{
 			TankDirection []dirs=TankDirection.values();
@@ -291,5 +304,72 @@ public class Tank
 	{
 		return new Rectangle(x,y,WIDTH,HEIGH);
 	}
+	
+	 public boolean collepsWithWall (Wall w)
+	{ 
+		if(this.getRec().intersects(w.getRec())&&(!this.good))
+		{
+			//live=false;
+			//explode e = new explode(this.x,this.y,tc);
+			//this.tc.explodes.add(e);
+			stay();
+			return true;
+			
+		}
+		return false;
+	}
+	 /**
+	  * 
+	  * 注意此处的List
+	  * @param tanks
+	  * @return
+	  */
+	 public boolean collepsWithTanks (java.util.List<Tank> tanks)
+		{ 
+			for(int i =0;i<tanks.size();i++)
+			{
+				Tank t=tanks.get(i);
+				if(this!=t)
+				{
+					if(this.live&&t.isLive()&&this.getRec().intersects(t.getRec()))
+					{
+						this.stay();
+						t.stay();
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+	private void stay()
+	{
+		x=oldX;
+		y=oldY;
+	}
+
+	public int getLife() 
+	{
+		return life;
+	}
+
+	public void setLife(int life) 
+	{
+		this.life = life;
+	}
+
+	private class BloodBar
+	{
+		public void draw(Graphics g)
+		{
+			Color c =g.getColor();
+			g.setColor(Color.red);
+			g.drawRect(x, y-10,WIDTH , 10);
+			g.fillRect(x, y-10, WIDTH*life/100, 10);
+			g.setColor(c);
+		}
+	}
+
+	
 }
 

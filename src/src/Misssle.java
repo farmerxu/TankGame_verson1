@@ -103,8 +103,16 @@ public class Misssle
 	{ 
 		if(this.getRec().intersects(t.getRec())&&t.isLive()&&(this.isGood()!=t.isGood()))
 		{
-			t.setLive(false);
 			live=false;
+			if(t.isGood())
+			{
+				t.setLife(t.getLife()-20);
+				if(t.getLife()==0)
+				{
+					t.setLive(false);
+				}
+			}
+			else 	t.setLive(false);
 			explode e = new explode(this.x,this.y,tc);
 			this.tc.explodes.add(e);
 			return true;
@@ -126,6 +134,18 @@ public class Misssle
 		return false;
 	}
 
+	public boolean hitWall (Wall w)
+	{ 
+		if(this.getRec().intersects(w.getRec()))
+		{
+			live=false;
+			//explode e = new explode(this.x,this.y,tc);
+			//this.tc.explodes.add(e);
+			return true;
+			
+		}
+		return false;
+	}
 	public boolean isGood()
 	{
 		return good;

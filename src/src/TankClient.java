@@ -15,6 +15,8 @@ public class TankClient extends Frame
 	public static final int GAME_WIDE=500;
 	
 	Tank mytank = new Tank(30,30,true,TankDirection.STOP,this);
+	Wall w1 = new Wall(60,100,20,150,this);
+	Wall w2 = new Wall(160,400,200,20,this);
 	List<Tank> enemyTanks  =new ArrayList<Tank>();
 	List<explode> explodes = new ArrayList<explode>();
 	//explode e= new explode(70,70,this);
@@ -53,6 +55,7 @@ public class TankClient extends Frame
 		g.setColor(Color.black);
 		g.drawString("missle count "+m.size(), 30, 20);
 		g.drawString("ememytank count  "+enemyTanks.size(), 200, 20);
+		g.drawString("mytank lifevalues: "+mytank.getLife(),30,30);
 		g.setColor(c);
 		
 		//t1.draw(g);
@@ -60,6 +63,9 @@ public class TankClient extends Frame
 		{
 			Tank kk = enemyTanks.get(i);
 			kk.draw(g);
+			kk.collepsWithWall(w1);
+			kk.collepsWithWall(w2);
+			kk.collepsWithTanks(enemyTanks);
 		}
 		for(int i=0;i<m.size();i++)
 		{
@@ -69,6 +75,8 @@ public class TankClient extends Frame
 				if(m1.hitTanKs(enemyTanks)) m.remove(i);
 				m1.draw(g);
 				m1.hitTanK(mytank);
+				m1.hitWall(w1);
+				m1.hitWall(w2);
 			}
 		}
 		for(int i=0;i<explodes.size();i++)
@@ -77,6 +85,8 @@ public class TankClient extends Frame
 			e.draw(g);
 		}
 		mytank.draw(g);
+		w1.draw(g);
+		w2.draw(g);
 	}
 	
 	public static void main(String[] args)
