@@ -17,6 +17,7 @@ public class TankClient extends Frame
 	Tank mytank = new Tank(30,30,true,TankDirection.STOP,this);
 	Wall w1 = new Wall(60,100,20,150,this);
 	Wall w2 = new Wall(160,400,200,20,this);
+	Blood b = new Blood(this);
 	List<Tank> enemyTanks  =new ArrayList<Tank>();
 	List<explode> explodes = new ArrayList<explode>();
 	//explode e= new explode(70,70,this);
@@ -31,6 +32,7 @@ public class TankClient extends Frame
 		{
 			enemyTanks.add(new Tank(30+40*i,30,false,TankDirection.D,this));
 		}
+		
 		this.setSize(GAME_WIDE, GAME_LENGH);
 		this.setResizable(false);
 		this.setBackground(Color.GREEN);
@@ -51,6 +53,18 @@ public class TankClient extends Frame
 	
 	public void paint(Graphics g)
 	{
+		/**
+		 * 　  每次在判断在画坦克之前，判断是不是敌人的坦克为０，是的话，重新画敌人坦克。
+		 */
+		
+		if(enemyTanks.size()==0)
+		{
+			for(int i=1;i<=6;i++)
+			{
+				enemyTanks.add(new Tank(30+40*i,30,false,TankDirection.D,this));
+			}
+		}
+		
 		Color c = g.getColor();
 		g.setColor(Color.black);
 		g.drawString("missle count "+m.size(), 30, 20);
@@ -72,7 +86,7 @@ public class TankClient extends Frame
 			Misssle m1=m.get(i);
 			if(m1.isLive())
 			{
-				if(m1.hitTanKs(enemyTanks)) m.remove(i);
+				m1.hitTanKs(enemyTanks);
 				m1.draw(g);
 				m1.hitTanK(mytank);
 				m1.hitWall(w1);
@@ -85,8 +99,11 @@ public class TankClient extends Frame
 			e.draw(g);
 		}
 		mytank.draw(g);
+		mytank.collepsWithBlood(b);
 		w1.draw(g);
 		w2.draw(g);
+		b.draw(g);
+		
 	}
 	
 	public static void main(String[] args)

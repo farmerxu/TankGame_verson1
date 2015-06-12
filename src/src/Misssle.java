@@ -115,6 +115,7 @@ public class Misssle
 			else 	t.setLive(false);
 			explode e = new explode(this.x,this.y,tc);
 			this.tc.explodes.add(e);
+			this.tc.m.remove(this);
 			return true;
 			
 		}
@@ -141,6 +142,7 @@ public class Misssle
 			live=false;
 			//explode e = new explode(this.x,this.y,tc);
 			//this.tc.explodes.add(e);
+			this.tc.m.remove(this);
 			return true;
 			
 		}

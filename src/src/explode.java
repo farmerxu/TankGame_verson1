@@ -11,7 +11,7 @@ public class explode
 	
 	int []diameter = {2,4,7,10,15,20,30,41,45,40,20,5};
 	
-	private TankClient tc;
+	TankClient tc;
 	
 	public explode( int x, int y,TankClient tc) 
 	{

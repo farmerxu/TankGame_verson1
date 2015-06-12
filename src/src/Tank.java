@@ -207,6 +207,10 @@ public class Tank
 		int keyValue=e.getKeyCode();
 		switch(keyValue)
 		{
+			case KeyEvent.VK_F2:
+				this.live=true;
+				this.setLife(100);
+				break;
 			case KeyEvent.VK_RIGHT:
 				right=false;break;
 			case KeyEvent.VK_LEFT:
@@ -342,6 +346,21 @@ public class Tank
 			return false;
 		}
 
+	 public boolean collepsWithBlood (Blood b)
+		{ 
+			if(this.getRec().intersects(b.getRec())&&(this.good))
+			{
+				//live=false;
+				//explode e = new explode(this.x,this.y,tc);
+				//this.tc.explodes.add(e);
+				this.setLife(100);
+				b.setLive(false);
+				return true;
+				
+			}
+			return false;
+		}
+	 
 	private void stay()
 	{
 		x=oldX;
