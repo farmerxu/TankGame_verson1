@@ -3,7 +3,11 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.Random;
 
-
+/**
+ * 
+ * @author xbb
+ *tank class  
+ */
 public class Tank 
 {
 	private int x;
@@ -26,12 +30,23 @@ public class Tank
 	private boolean down=false;
 	TankClient tc;
 	
+	/*
+	 *炮筒方向和坦克运动方向，打出的子弹方向和炮筒一样 
+	 */
 	private TankDirection dir = TankDirection.STOP;
 	private TankDirection ptdir=TankDirection.D;
 	private int step=r.nextInt((12)+5);
-	
+	 
+	/*
+	 * 坦克运动的八个方向
+	 */
 	enum TankDirection{U,D,L,R,LU,RU,LD,RD,STOP};
-	
+	/**
+	 * 构造方法
+	 * @param x
+	 * @param y
+	 * @param good
+	 */
 	public Tank(int x, int y,boolean good)
 	{
 		this.x = x;
@@ -48,7 +63,10 @@ public class Tank
 		this.dir=dir;
 		this.tc=tc;
 	}
-	
+	/**
+	 * 话坦克和炮筒
+	 * @param g
+	 */
 	public void draw(Graphics g)
 	{
 		if(!live)	return ;
@@ -108,7 +126,9 @@ public class Tank
 		}*/
 		move();//注意move（）的地方
 	}
-	
+	/**
+	 * 坦克移动
+	 */
 	public void move ()
 	{
 		//int keyValue=e.getKeyCode();
@@ -153,7 +173,9 @@ public class Tank
 			this.ptdir=this.dir;
 		}
 	
-		//  防止坦克出界
+		/**
+		 *  防止坦克出界
+		 */
 		if(x<0) stay();
 		if(y<0) stay();
 		if(x+Tank.WIDTH>TankClient.GAME_WIDE) stay();
@@ -168,7 +190,6 @@ public class Tank
 				step=r.nextInt((12)+3);
 			}
 			step--;
-			// 必须注意这里的代码
 			/**
 			 * 此处代码防止坦克发出的子弹太快
 			 */
@@ -178,7 +199,12 @@ public class Tank
 			}
 		}
 	}
-	
+	/**
+	 * 按键的处理，按下　向上、向下、向左、向右箭头分别向不同的方向移动
+	 * 按下ctrl主坦克发射炮弹
+	 * 按下f2，主坦克复活
+	 * @param e
+	 */
 	public void keyPressed1(KeyEvent e)
 	{
 		int keyValue=e.getKeyCode();
@@ -223,6 +249,10 @@ public class Tank
 		MoveDir();
 	}
 	
+	/**
+	 * 
+	 * 根据案件判断坦克运动的方向
+	 */
 	public void MoveDir()
 	{
 		if((left)&(!right)&(!up)&(!down))
@@ -270,6 +300,11 @@ public class Tank
 		}
 	}
 	
+	/**
+	 * 发射炮弹
+	 * @return　Misssle类的对象
+	 */
+	
 	public Misssle fire()
 	{
 		int x = this.x + Tank.WIDTH/2 - Misssle.WIDTH/2;
@@ -303,12 +338,20 @@ public class Tank
 	{
 		this.live=live;
 	}
+	/**
+	 * 用作判断是否发生撞击
+	 * @return
+	 */
 	
 	public Rectangle getRec()
 	{
 		return new Rectangle(x,y,WIDTH,HEIGH);
 	}
-	
+	/**
+	 * 坦克碰墙
+	 * @param w
+	 * @return
+	 */
 	 public boolean collepsWithWall (Wall w)
 	{ 
 		if(this.getRec().intersects(w.getRec())&&(!this.good))
@@ -323,7 +366,7 @@ public class Tank
 		return false;
 	}
 	 /**
-	  * 
+	  * 坦克不能碾压坦克，碰到会返回ｓ
 	  * 注意此处的List
 	  * @param tanks
 	  * @return

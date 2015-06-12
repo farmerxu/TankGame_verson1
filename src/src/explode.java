@@ -3,6 +3,11 @@ package src;
 import java.awt.Color;
 import java.awt.Graphics;
 
+/**
+ * Explode 类，模拟被子弹打中后，坦克的爆炸
+ * @author xbb
+ *
+ */
 public class explode 
 {
 	private boolean live=true;
